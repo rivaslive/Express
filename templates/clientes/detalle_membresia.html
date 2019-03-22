@@ -1,0 +1,111 @@
+{% extends 'base/index.html' %}
+{% block title %}
+    Membresias - Detalle
+{% endblock %}
+{% block activeClientes %}
+    active
+{% endblock %}
+{% block style %}
+    .togg-primary {
+    height: 1.8rem;
+    border-radius:1rem;
+    background: rgb(78, 115, 223);
+    color:white;
+    padding: .2rem .5rem .2rem;
+    }
+    .togg-danger {
+    height: 1.8rem;
+    border-radius:1rem;
+    background: orangered;
+    color:white;
+    padding: .2rem .5rem .2rem;
+    }
+    #dataTable_length select{
+    padding:4px;
+    border-radius:.5rem;
+    }
+    #dataTable_filter input{
+    border-radius:.5rem;
+    }
+    #dataTable_paginate{
+    height:50px;
+    }
+    #dataTable_previous{
+    margin: 0 10px;
+    padding:5px;
+    border-radius:.5rem;
+    background:rgb(78, 115, 223);
+    color:white;
+    }
+    #dataTable_next{
+    margin: 0 10px;
+    padding:5px;
+    border-radius:.5rem;
+    background:rgb(78, 115, 223);
+    color:white;
+    }
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-12 text-center d-flex">
+            <h1>Membresia de {{ member.cliente.nombre }} {{ member.cliente.apellido }}</h1>
+
+            {% if member.estado == 1 %}
+                <span class="text-white mx-2 togg-primary"> Activo</span>
+            {% else %}
+                <span class="text-white mx-2 togg-danger">Desactivado</span>
+            {% endif %}
+
+        </div>
+        <div class="col-12">
+
+            <!-- Page Heading -->
+
+            <p class="mb-4">Acontinuacion se muestran todas las transacciones realizadas por este usuario, las
+                membrecias pueden cambiar.</p>
+
+            <!-- DataTales Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Todos los movimientos</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive" id="example">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Operacion</th>
+                                <th>Total</th>
+                                <th>Observaciones</th>
+                                <th>Membresia</th>
+                                <th>Matricula</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for operation in operations %}
+                            <tr>
+                            <td>{{ operation.fechaOperacion }}</td>
+                            <td>{{ operation.tipoOperacion }}</td>
+                            <td>{{ operation.descuento }}</td>
+                            <td>{{ operation.observaciones }}</td>
+                            <td>{{ operation.Membresia.tipoMembresia.tipo }}</td>
+                            <td>{{ member.cliente.matricula }}</td>
+
+                            </tr>
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% for foo in operations %}
+            <p>{{ foo.tipoOperacion }}</p>
+        {% endfor %}
+
+    </div>
+
+
+{% endblock %}

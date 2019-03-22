@@ -1,0 +1,124 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>CAR-WASH - Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+
+    <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %} ">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'fonts/iconic/css/material-design-iconic-font.min.css' %} ">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <!--===============================================================================================-->
+</head>
+<body>
+<style>
+    body {
+        /* background: url('
+    {% static 'media/car07.jpg' %} ') center no-repeat,
+        url('
+    {% static 'media/car02.jpg' %} ') left no-repeat;
+
+        background-size: auto 145vh; */
+
+    }
+
+    #fondo1 {
+        background-image: url('{% static 'media/car02.jpg' %}');
+        background-repeat: no-repeat;
+        background-size: cover;
+
+    }
+
+    #fondo3 {
+        width: 680px;
+        background-image: url('{% static 'media/car07.jpg' %}');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+    @media screen and (max-width: 1200px){
+        #fondo3{
+            width: 100%;
+        }
+    }
+    @media screen and (max-width: 768px){
+        #fondo3{
+            width: 100%;
+        }
+    }
+</style>
+<div id="fondo1">
+    <div id="fondo2">
+        <div id="fondo3">
+            <div class="container-login100">
+                <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30">
+
+                    {% block login %}
+
+                        <form class="login100-form validate-form" method="post">
+
+				<span class="login100-form-title  p-b-37">
+					Iniciar Sesión
+				</span>
+
+                            <div class="wrap-input100 validate-input m-b-20" data-validate="Nombre de usuario">
+                                <input class="input100" type="text" name="username" placeholder="Nombre de usuario">
+                                <span class="focus-input100"></span>
+                            </div>
+
+                            <div class="wrap-input100 validate-input m-b-25" data-validate="Ingrese contraseña">
+                                <input class="input100" type="password" name="password"
+                                       placeholder="Ingrese su contraseña">
+                                <span class="focus-input100"></span>
+                            </div>
+
+                            <div class="container-login100-form-btn">
+                                <button class="login100-form-btn" type="submit">
+                                    Ingresar
+                                </button>
+                            </div>
+
+                            <div class="text-center p-t-57 p-b-20">
+					<span class="txt1">
+					Sistema creado por Kevin Rivas López.
+					</span>
+                            </div>
+                            {% csrf_token %}
+                        </form>
+                        </div>
+                        </div>
+                        </div>
+
+
+                    {% endblock %}
+
+    </div>
+</div>
+
+
+<div id="dropDownSelect1"></div>
+
+<!--===============================================================================================-->
+<script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %} "></script>
+<!--===============================================================================================-->
+<script src="{% static 'vendor/animsition/js/animsition.min.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'vendor/bootstrap/js/popper.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'vendor/select2/select2.min.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'vendor/daterangepicker/moment.min.js' %}"></script>
+<script src="{% static 'vendor/daterangepicker/daterangepicker.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'vendor/countdowntime/countdowntime.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>

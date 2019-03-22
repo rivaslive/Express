@@ -1,0 +1,112 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Imprimir</title>
+    <link rel="stylesheet" href="{% static 'css/custom/custom.css' %}">
+
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,900' rel='stylesheet' type='text/css'>
+    <style>
+        body{
+            margin: 10px 30px;
+        }
+        p {
+            font-size: 1rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        span {
+            font-size: 1rem;
+            font-weight: lighter;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: lighter;
+        }
+    </style>
+</head>
+<body class="imprimir">
+{% if factura %}
+<div class="oculto-impresion">
+    <h1 align="center" >EFECTIVO: ${{ factura.efectivo }}</h1>
+    <h1 align="center" >TOTAL: <span style="color: #3f51b5; font-size: 40px">${{ factura.total }}</span></h1>
+    <h1 align="center" >CAMBIO: <span style="color:red; font-size: 40px">${{ factura.cambio }}</span></h1>
+    <a href="" onclick="window.print()" class="boton-imprimir">IMPRIMIR</a>
+    <a href="{% url 'ventas:shop' %}" class="boton-regresar">REGRESAR</a>
+</div>
+<section class="form-general datos-generales">
+    <div class="d-contenedor">
+        <h2 style="text-align: center">CAR-WASH</h2>
+        <h3 align="center">Calle el centro frente a catedral</h3>
+
+    </div>
+
+    <div class="d-contenedor">
+
+        <div class="cnt-inputs">
+            <table border=0>
+                <div style="width: 100%; display: flex; margin: 15px 0 0 0;">
+                    <div style="width: 70%">
+                        <p align="left">FECHA: <span>{{ factura.fecha }}</span></p>
+                    </div>
+                    <div style="width: 50%">
+                        <p align="right">Ticket # <span>{{ factura.numero }} 2019</span>
+                        </p>
+                    </div>
+                </div>
+                ***************************************************************
+                <thead>
+                <tr>
+                    <th><h3>Código Articulo</h3></th>
+                    <th><h3>Producto</h3></th>
+                    <th><h3>Precio c/u</h3></th>
+                    <th><h3>cantidad</h3></th>
+                    <th><h3>sub Total</h3></th>
+                </tr>
+                </thead>
+
+                {% for a in detalle %}
+                    <tbody>
+
+                    <tr>
+
+                        <td><p>{{ a.id_articulo.codigo_articulo }}</p></td>
+                        <td><p>{{ a.id_articulo.nombre_articulo }}</p></td>
+                        <td><p>${{ a.id_articulo.precio_unidad }}</p></td>
+                        <td><p>{{ a.cantidad }}</p></td>
+                        <td>
+                            <center><h3>{{ a.sub_total }}</h3></center>
+                        </td>
+                    </tr>
+
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+            ***************************************************************
+
+            <div class="totales">
+                <p>TOTAL..............................................................................................$ {{ factura.total }}</p>
+                <p>DESCUENTO..................................................................................$ {{ factura.descuentoTotal }}</p>
+                <p>EFECTIVO.......................................................................................$ {{ factura.efectivo }}</p>
+                <p>CAMBIO...........................................................................................$ {{ factura.cambio }}</p>
+            </div>
+        ========================================================
+            <p align="center">¡GRACIAS POR PREFERIRNOS!</p>
+
+        </div>
+
+    </div>
+</section>
+    {% else %}
+    <h1>No hay venta Activa</h1> <a class="boton-imprimir" href="{% url 'ventas:shop' %}">Regresar</a>
+{% endif %}
+</body>
+</html>

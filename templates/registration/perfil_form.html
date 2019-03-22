@@ -1,0 +1,31 @@
+{% extends 'registration/login.html' %}
+{% load staticfiles %}
+{% block login %}
+    <link rel="stylesheet" href="{% static 'css/sb-admin-2.min.css' %}">
+    <style>
+        label {
+            color: #000;
+        }
+    </style>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="User"><b>Nombre de usuario:</b></label>
+                <input type="text" id="User" class="form-control" name="username">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="Password"><b>Password:</b></label>
+                <input type="password" id="Password" class="form-control" name="password">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="Password1"><b>Password2:</b></label>
+                <input type="password" id="Password1" class="form-control" name="password1">
+            </div>
+
+        </div>
+        <button type="submit" class="btn btn-primary col-12">Registrar</button>
+    </form>
+{% endblock %}
+
+

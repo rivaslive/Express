@@ -1,0 +1,342 @@
+{% extends 'base/index.html' %}
+{% block active3 %}
+    activo
+{% endblock %}
+{% block car %}
+    <!--suppress ALL -->
+    <div class="car">
+        <a id="trash-venta" data-toggle="modal" data-target="#exampleModal2" class="btn-lg bg-danger"><i
+                class="fas fa-trash "></i></a>
+    </div>
+{% endblock %}
+{% block content %}
+    <style>
+        #plus-shopping {
+            margin-top: -20px;
+            font-size: 18px;
+            border-radius: 50%;
+            background-color: rgb(33, 150, 243, 0.7);
+            color: white;
+        }
+
+        @media screen and (max-width: 768px) {
+            #plus-shopping {
+                width: 100%;
+                border-radius: 3.5rem;
+                background-color: rgb(33, 150, 243);
+                color: white;
+            }
+        }
+
+        #plus-shopping:hover {
+            text-decoration: none;
+            color: white;
+            background-color: rgb(33, 150, 243);
+        }
+
+        #trash-venta {
+            -webkit-box-shadow: 0 5px 11px 0 rgba(0, 0, 0, .18), 0 4px 15px 0 rgba(0, 0, 0, .15);
+            box-shadow: 0 5px 11px 0 rgba(0, 0, 0, .18), 0 4px 15px 0 rgba(0, 0, 0, .15);
+            width: 60px;
+            height: 60px;
+            position: relative;
+            float: right;
+            z-index: 90000;
+            vertical-align: middle;
+            display: inline-block;
+            overflow: hidden;
+            -webkit-transition: all .2s ease-in-out;
+            -o-transition: all .2s ease-in-out;
+            transition: all .2s ease-in-out;
+            margin: 10px;
+            -webkit-border-radius: 50%;
+            border-radius: 50%;
+            padding: 4px 0;
+            cursor: pointer;
+
+        }
+
+        @media screen and (max-width: 728px) {
+            #trash-venta {
+                width: 40px;
+                height: 40px;
+                margin-left: -24px;
+            }
+        }
+
+        #trash-venta i {
+            width: 61.1px;
+            height: 61.1px;
+            border-radius: 100%;
+            line-height: 50px;
+            text-align: center;
+            padding: 0.8rem auto;
+            font-size: 1.6rem;
+            color: white;
+        }
+
+        @media screen and (max-width: 728px) {
+            #trash-venta i {
+                width: 41.1px;
+                height: 41.1px;
+                line-height: 0;
+                font-size: 1rem;
+
+                padding: -0.8rem auto;
+            }
+        }
+
+        #trash-venta:hover {
+
+            transition: all 300ms;
+            text-decoration: none;
+            color: white;
+
+        }
+
+        #trash-venta:hover i {
+            transition: all 300ms;
+            color: white;
+
+        }
+
+        option {
+            background: rgb(100, 100, 100);
+        }
+
+        .btn-green {
+            background: rgb(65, 170, 61);
+            color: white;
+        }
+    </style>
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags  == 'warning' %}
+                <input id="msj" type="hidden" value="1">
+                <input id="contenido" type="hidden" value="{{ message }}">
+            {% endif %}
+            {% if message.tags == 'success' %}
+                <input id="msj" type="hidden" value="0">
+                <input id="contenido" type="hidden" value="{{ message }}">
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+
+
+
+
+    <div class="container-fluid">
+
+        <div class="row text-white" style="background-color: rgb(83, 109, 122); border-radius:.525rem;">
+            <div class="col-12 mt-lg-0 ">
+                <h3 class="card-title mt-2" style="font-weight: 500">Venta de Artículos</h3>
+                <h5 class="card-subtitle " style="color: rgb(200,200,200)">Formulario</h5>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-3 mt-4">
+                <h4 class="rounded col-12 text-white" align="center"
+                    style="background-color: rgb(240,240,240,0.4); height: 45px; padding: 7px 5px">
+                    Total:
+                    <span style="color: black">${% if total %}{{ total }}{% else %}
+                        0.00{% endif %}
+                    </span>
+                </h4>
+                <a class="rounded btn btn-green col-12 text-white" data-toggle="modal"
+                   data-target="#exampleModal">vender</a>
+            </div>
+            <div class="col-12 col-lg-9">
+                {% if form %}
+                    <form action="{% url 'ventas:editarShop' form.pk %}" id="formAdd" method="POST">
+                {% else %}
+                    <form action="{% url 'ventas:venta' %}" id="formAdd" method="POST">
+                {% endif %}
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <label for="id_codigo_articulo">Código del Artículo</label>
+                        <input placeholder="Ej: 098473612" type="text" id="id_codigo_artic" name="codigo"
+                               class="form-control dropdown-toggle" data-toggle="dropdown" autocomplete="off"
+                               required value="{{ form.codigo_articulo }}">
+                        <div id="divArticulo" class="dropdown-menu w-100">
+                            <!-- se llenara con la busque da -->
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <label for="id_Desc">Cliente</label>
+                        <input type="text" id="Cliente" class="form-control"
+                               placeholder="Nombre (Opcional)" name="cliente" value="{{ form.cliente }}">
+                        <input type="hidden" id="Cliente2" name="cliente2" value="{{ form.cliente }}">
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-6 ">
+                        <label for="id_Desc">Descuento en porcentaje</label>
+                        <input type="text" id="id_Desc" class="form-control"
+                               placeholder="% Descuento (Opcional)" name="desc" value="{{ desc }}">
+                    </div>
+                    <div class="col-9 col-md-5 col-lg-5">
+                        <label for="id_cantidad">Cantidad</label>
+                        <input placeholder="Ejemplo: 10" type="text" id="id_cantidad" name="cantidad"
+                               class="form-control"
+                               value="{{ form.cantidad }}">
+                    </div>
+
+                    <div class="col-3 col-md-1 text-center">
+                        <button form="formAdd" class="btn mt-4 btn-circle bg-info text-white" type="submit"
+                                title="agregar producto">
+                            +
+                        </button>
+                    </div>
+                    <div class="col-12 col-lg-6 ">
+
+                    </div>
+                </div>
+                </form>
+            </div>
+            <p style="color: transparent">sdjaskd</p>
+        </div>
+
+
+        <div class="table-responsive mt-4">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">N°</th>
+                    <th scope="col">Código</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Precio Venta</th>
+                    <th scope="col">Desc</th>
+                    <th scope="col">Sub-Total</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if query %}
+                    {% for foo in query %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ foo.id_articulo.codigo_articulo }}</td>
+                            <td>{{ foo.id_articulo.nombre_articulo }}</td>
+                            <td>{{ foo.cantidad }}</td>
+                            <td>${{ foo.id_articulo.precio_unidad }}</td>
+                            <td>${{ foo.descuento }}</td>
+                            <td>${{ foo.sub_total }}</td>
+                            <td>
+                                <a href="{% url 'ventas:deleteDetail' foo.pk %}" class="">
+                                    <i class="fas fa-minus-circle fa-md fa-fw text-danger" style="font-size: 20px"
+                                       title="Eliminar">
+                                        <span style="font-size: 20px"></span>
+                                    </i>
+                                </a>
+                                <a href="{% url 'ventas:editarShop' foo.pk %}"
+                                   class=""><i class="fas fa-pen-square fa-lg fa-fw text-primary"
+                                               title="Editar"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Modal Vuelto -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Efectivo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="vender" action="{% url 'ventas:vender' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="col-md-12">
+                            <h1>Total: {{ total }}</h1>
+                            <label for="Cambio">Ingrese el efectivo con el que pagará su cliente</label>
+                            <input type="text" id="Cambio" name="cambio" class="form-control" placeholder="0.00"
+                                   style="color: black;" required>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button form="vender" type="submit" class="btn btn-success active">Vender</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Confiramar Eliminar Venta -->
+    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h3 align="center">¿Esta seguro de eliminar la venta actual?</h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary rounded" data-dismiss="modal">Cerrar</button>
+                    <a href="{% url 'ventas:drop' %}" class="btn btn-warning active rounded mx-2">Confirmar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block script %}
+    <script>
+        $(document).ready(function () {
+            $('#id_codigo_artic').keyup(function () {
+
+                var request = $.ajax({
+                    url: '{% url 'articulo:buscar_json' %}',
+                    method: "POST",
+                    data: {valor: $('#id_codigo_artic').val()},
+                    dataType: 'json'
+                });
+
+                request.done(function (data) {
+                    var items = $('#divArticulo');
+                    items.html('');
+                    if (data === '') {
+                        items.html('<a class="dropdown-item">No existe Z</a>');
+                    } else {
+                        console.log("CORRECTO");
+                        data = JSON.parse(data);
+                        $.each(data.articulos, function (j, resp) {
+                            console.log(j);
+                            items.append('<a class="dropdown-item" onclick="codigo_select(\'' + resp['codigo_articulo'] + '\');"><div><b>' + resp.nombre_articulo + ' ' + resp.codigo_articulo + '</b><br>' + ' Stock: ' + resp.stock + '</div></a>');
+
+                        });
+                        items.append('' +
+                            '<script type="text/javascript">function codigo_select(codigo){' +
+                            '$("#id_codigo_artic").val(codigo);' +
+                            '}' +
+                            '<\/script>')
+                    }
+
+                });
+                request.fail(function () {
+                    console.log("No se ha podido obtener la información");
+                });
+            });
+
+            //alert('readde');
+        });
+
+
+        function redireccionar() {
+            setTimeout("window.location.reload()", 3000);
+
+        }
+    </script>
+
+{% endblock %}

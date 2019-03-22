@@ -1,0 +1,481 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="es-sv">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>CAR-SHOP - {% block  title %}
+        Home
+    {% endblock %}</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="{% static 'vendor/fontawesome-free/css/all.css' %}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+
+    <!-- Custom styles for this template-->
+    <link href="{% static 'css/sb-admin-2.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/alertify.min.css' %}">
+    <!-- Bootstrap theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/css/themes/bootstrap.min.css"/>
+    <link rel="stylesheet" href="{% static 'css/all.css' %}"/>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <!-- Custom styles for this page -->
+    <link href="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}" rel="stylesheet">
+    <style>
+        {% block style %}
+
+        {% endblock %}
+
+        .car {
+
+            position: fixed;
+            bottom: 0;
+            margin-left: 75%;
+            font-size: 50px;
+            z-index: 900000;
+
+        }
+
+        body.sidebar-toggled .car {
+            margin-left: 0;
+        }
+
+        @media screen and (max-width: 1200px) {
+            .car {
+                bottom: 0;
+                margin-left: 65%;
+            }
+        }
+
+        @media screen and (max-width: 728px) {
+            .car {
+                bottom: 0;
+                margin-left: 0;
+                font-size: 25px;
+            }
+        }
+
+        @font-face {
+            font-family: IDAutomationHC39M;
+            src: url('{% static 'fonts/barcode/IDAutomationHC39M.woff' %}');
+        }
+
+        .barcode {
+            font-family: 'IDAutomationHC39M', cursive;
+            font-size: 1.2rem;
+        }
+
+        .bg-gradient-dark {
+            background-color: rgb(22, 22, 22);
+            background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, rgb(35, 35, 35)), to(rgb(22, 22, 22)));
+            background-image: linear-gradient(180deg, rgb(35, 35, 35) 10%, rgb(22, 22, 22) 100%);
+            background-size: cover;
+        }
+
+        .btn-radius {
+            position: relative;
+            width: 5px;
+            padding: 6px 11.5px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .plus {
+
+        }
+
+        .text-sm {
+            font-size: .8rem;
+        }
+
+        .margin-btn {
+            margin-top: -20px;
+        }
+
+        .bg-dark {
+            background-color: rgb(0, 0, 0);
+
+        }
+
+        .icono {
+            width: 2rem;
+            height: 1.5rem;
+            border-radius: .5rem;
+            color: white;
+            cursor: pointer;
+        }
+
+
+    </style>
+</head>
+
+<body id="page-top" onload="return mensaje();">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    {% block aside %}
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'articulo:index' %}">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-car"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">CAR-SHOP</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item {% block activeInicio %} {% endblock %}">
+                <a class="nav-link" href="{% url 'articulo:index' %}">
+                    <i class="fas fa-fw fa-home"></i>
+                    <span>Inicio</span></a>
+            </li>
+            <li class="nav-item {% block activeClientes %} {% endblock %}">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2"
+                   aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Clientes</span>
+                </a>
+                <div id="collapsePages2" class="collapse" aria-labelledby="headingPages"
+                     data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Operaciones:</h6>
+                        <a class="collapse-item" onclick="return abrir_modal('{% url 'clientes:reg_membrecia' %}')">Nuevo
+                            cliente</a>
+                        <a class="collapse-item" href="{% url 'clientes:membresias' %}">Membrecias</a>
+                    </div>
+                </div>
+            </li>
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Opciones
+            </div>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item {% block activeInventario %} {% endblock %}">
+                <a class="nav-link" href="{% url 'articulo:articulo' %}">
+                    <i class="fas fa-fw fa-paper-plane"></i>
+                    <span>Inventario</span></a>
+
+            </li>
+
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item {% block activeVender %} {% endblock %}">
+                <a class="nav-link" href="{% url 'ventas:shop' %}">
+                    <i class="fas fa-fw fa-shopping-cart"></i>
+                    <span>Vender</span></a>
+            </li>
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item {% block activeServivios %} {% endblock %}">
+                <a class="nav-link collapsed"  data-toggle="collapse" data-target="#collapsePages1"
+                   aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fas fa-fw fa-shopping-basket"></i>
+                    <span>Servicios</span>
+                </a>
+                <div id="collapsePages1" class="collapse" aria-labelledby="headingPages"
+                     data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Operaciones:</h6>
+                        <a class="collapse-item" href="#">Crear un servicio</a>
+                        <a class="collapse-item" href="{% url 'ventas:servicios' %}">Vender Servio</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Reportes
+            </div>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item {% block activeReporte %} {% endblock %}">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+                   aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fas fa-fw fa-receipt"></i>
+                    <span>Reportes</span>
+                </a>
+                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Estadisticas:</h6>
+                        <a class="collapse-item" href="#">Arqueo de Caja</a>
+                        <a class="collapse-item" href="#">Reporte del mes</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Nav Item - Charts -->
+            <li class="nav-item {% block activeGraf %} {% endblock %}">
+                <a class="nav-link" href="../../startbootstrap-sb-admin-2-gh-pages/charts.html">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Graficos</span></a>
+            </li>
+
+            <!-- Nav Item - Tables -->
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">
+                    <i class="fas fa-fw fa-chevron-circle-right"></i>
+                    <span>Desconectar</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
+    {% endblock %}
+
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+            {% block navbar %}
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    {% block search %}
+
+
+
+                    {% endblock %}
+                    <ul class="navbar-nav ml-auto">
+                        {% block searchMobile %}
+
+                        {% endblock %}
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Pepe Rivas</span>
+                                <img class="img-profile rounded-circle" src="{% static 'media/hombre.png' %}">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                 aria-labelledby="userDropdown">
+
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-history fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Historial Ventas
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cog fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Generar codigo de Barras
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'logout' %}" data-toggle="modal"
+                                   data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Salir
+                                </a>
+                            </div>
+                        </li>
+
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+            {% endblock %}
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags  == 'warning' %}
+                            <input id="msj" type="hidden" value="1">
+                            <input id="contenido" type="hidden" value="{{ message }}">
+                        {% endif %}
+                        {% if message.tags == 'success' %}
+                            <input id="msj" type="hidden" value="0">
+                            <input id="contenido" type="hidden" value="{{ message }}">
+                        {% endif %}
+                    {% endfor %}
+
+                {% endif %}
+
+
+
+
+                {% block content %}
+
+                {% endblock %}
+                {% block car %}
+
+                {% endblock %}
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+        {% block footer %}
+
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Car-shop 2019</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+        {% endblock %}
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cerrar Sesion</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Seleccion Cerrar sesion si estas seguro de ello.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                <a class="btn btn-primary" href="{% url 'logout' %}">Salir</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="popup" class="modal fade" role="dialog"></div>
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'js/alertify.js' %}"></script>
+<!-- Bootstrap theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/css/themes/bootstrap.rtl.min.css"/>
+
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+<script type="text/javascript">
+    //override defaults
+    alertify.defaults.transition = "slide";
+    alertify.defaults.theme.ok = "btn btn-primary";
+    alertify.defaults.theme.cancel = "btn btn-danger";
+    alertify.defaults.theme.input = "form-control";
+</script>
+
+<!-- Page level plugins -->
+<script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dataTable').dataTable({
+            "language": {
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                "infoFiltered": "(filtrando de _MAX_ total registros)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrando _MENU_ registros",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "No records encontrados",
+                "emptyTable": "No hay datos que mostrar",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Ultimo",
+                    "next": "Siguiente",
+                    "previous": "Anterior",
+                }
+            }
+        });
+    });
+</script>
+<script src="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+<script>
+
+    function abrir_modal(url) {
+        $("#popup").load(url, function () {
+            $(this).modal("show");
+        });
+        return false;
+    }
+
+    function cerrar_modal() {
+        $("#popup").modal("hide");
+        return false;
+    }
+
+    function mensaje() {
+        var msj = document.getElementById("msj").value;
+        var contenido = document.getElementById("contenido").value;
+        console.log(msj);
+        if (msj != 0) {
+            return alertify.notify(contenido, 'error ', 5, function () {
+                console.log('dismissed');
+            });
+        }
+        else {
+            return alertify.notify(contenido, 'success', 5, function () {
+                console.log('success');
+            });
+        }
+    }
+
+
+</script>
+{% block script %}
+
+{% endblock %}
+
+</body>
+
+</html>

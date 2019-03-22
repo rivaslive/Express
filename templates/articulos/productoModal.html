@@ -1,0 +1,182 @@
+<!-- Modal -->
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+            {% if pk %}
+                <h5 class="modal-title" id="exampleModalLabel">Editar Artículo</h5>
+            {% else %}
+                <h5 class="modal-title" id="exampleModalLabel">Agregar nuevo Artículo</h5>
+            {% endif %}
+
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            {% if pk %}
+                <form id="form2" name="crearArt" action="{% url 'articulo:editarInventario' pk %}" method="post">
+            {% else %}
+                <form id="form2" name="crearArt" action="{% url 'articulo:crearArticulo' %}" method="post">
+            {% endif %}
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="Name"><b>Nombre del Artículo</b></label>
+                    {{ form.nombre_articulo }}
+                </div>
+                <div class="form-group col-6 col-md-6">
+                    <label for="Categoria"><b>Categoria</b></label>
+                    {{ form.id_categoria }}
+                </div>
+
+
+                <div class="form-group col-6 col-md-4">
+                    <label for="StockUni"><b>Unidades agregar</b></label>
+                    {{ form.stock }}
+                </div>
+                <div class="form-group col-6 col-md-4">
+                    <label for="id_precio_unidad"><b>Precio venta c/u</b></label>
+                    {{ form.precio_unidad }}
+
+                </div>
+                <div class="form-group col-6 col-md-4">
+                    <label for="Codigo"><b>Código de barras</b></label>
+                    {{ form.codigo_articulo }}
+                </div>
+            </div>
+
+
+            <div class="form-row">
+
+            </div>
+            <input type="hidden" name="is_activate" value="1">
+            {% csrf_token %}
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="espacio">
+                {% if pk %}
+                    <button type="button" class="btn  btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" form="form2" class="btn btn-raised bg-primary text-white" id="subm">Actualizar
+                    </button>
+                {% else %}
+                    <button type="button" class="btn  btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" form="form2" class="btn btn-raised bg-primary text-white" id="subm">Registrar
+                    </button>
+                {% endif %}
+
+            </div>
+            <script>
+                $(function () {
+                    $('#subm').click(function (e) {
+                        var nombre, codigo, stock, cajas, price;
+                        nombre = $("#id_nombre_articulo").val();
+                        codigo = $("#id_codigo_articulo").val();
+                        stock = $("#id_stock").val();
+                        cajas = $("#id_stock_caja").val();
+                        price = $("#id_precio_unidad").val();
+
+                        limpiar();
+
+                        /*var onlyText = /^[a-zA-ZáéíóúàèìòùÀÈÌÒÙÁÉÍÓÚñÑüÜ\s]+$/;*/
+                        var onlyInt = /^[0-9]+(.[0-9]+)?$/;
+                        var onlyDecimal = /^(0|[1-9]\d*)(\.\d+)?$/;
+
+                        if (nombre === "" || codigo === "" || stock === "" || price === "") {
+                            e.preventDefault();
+                            $("#id_nombre_articulo").addClass("error");
+                            $("#id_codigo_articulo").addClass("error");
+                            $("#id_stock").addClass("error");
+                            alertify.alert("Error de Campos", "Todos los campos son obligatorios");
+                            return false;
+                        } else if (nombre === null) {
+                            e.preventDefault();
+                            $("#id_nombre_articulo").addClass("error");
+                            alertify.alert("Error de Campos", "Nombre no puede ser nulo");
+                            return false;
+                        }
+                    }
+                else
+                    if (price === null || !price.match(onlyDecimal)) {
+                        e.preventDefault();
+                        $("#id_precio_unidad").addClass("error");
+                        alertify.alert("Error de Campos", "ingrece un numero decimal correcto");
+                        return false;
+                    }
+                    return $("#form2").submit();
+                });
+
+                function limpiar() {
+                    $("#id_nombre_articulo").removeClass("error");
+                    $("#id_codigo_articulo").removeClass("error");
+                    $("#id_stock").removeClass("error");
+                    $("#id_stock_caja").removeClass("error");
+                    $("#id_precio_unidad").removeClass("error");
+                }
+                })
+                ;
+                $(function () {
+                    $("#PriceCj").on('onfocus', function () {
+                        $(this).val();
+
+                    });
+                    $("#id_stock").on('change', function () {
+                        var stock, priceUnidad, cajas, priceCj;
+                        stock = $("#id_stock").val();
+                        priceUnidad = $("#id_precio_unidad").val();
+                        cajas = $("#id_stock_caja").val();
+                        if (stock !== '' && priceUnidad !== '' && cajas !== '') {
+                            priceCj = (parseFloat(stock) * parseFloat(priceUnidad));
+                            console.log(priceCj.toFixed(2));
+                            $("#PriceCj").val(priceCj.toFixed(2));
+                        }
+
+                    });
+                    $("#id_precio_unidad").on('change', function () {
+                        var stock, priceUnidad, cajas, priceCj;
+                        stock = $("#id_stock").val();
+                        priceUnidad = $("#id_precio_unidad").val();
+                        cajas = $("#id_stock_caja").val();
+                        if (stock !== '' && priceUnidad !== '' && cajas !== '') {
+                            priceCj = (parseFloat(stock) * parseFloat(priceUnidad));
+                            console.log(priceCj.toFixed(2));
+                            $("#PriceCj").val(priceCj.toFixed(2));
+                        }
+
+                    });
+                    $("#id_stock_caja").on('change', function () {
+                        var stock, priceUnidad, cajas, priceCj;
+                        stock = $("#id_stock").val();
+                        priceUnidad = $("#id_precio_unidad").val();
+                        cajas = $("#id_stock_caja").val();
+                        if (stock !== '' && priceUnidad !== '' && cajas !== '') {
+                            priceCj = (parseFloat(stock) * parseFloat(priceUnidad));
+                            console.log(priceCj.toFixed(2));
+                            $("#PriceCj").val(priceCj.toFixed(2));
+                        }
+
+                    });
+
+                });
+
+                $(function () {
+                    $("#id_id_presentacion").on('change', function () {
+                        if ($(this).val() === '1') {
+                            $("#id_stock_caja").val('');
+                            $("#PriceCj").val('');
+                            $("#inputCaja").css("display", "none");
+                            $("#inputCaja2").css("display", "none");
+                        } else if ($(this).val() === '2') {
+                            $("#inputCaja").css("display", "block");
+                            $("#inputCaja2").css("display", "block");
+                        }
+
+                    });
+                });
+
+            </script>
+        </div>
+    </div>
+</div>
+

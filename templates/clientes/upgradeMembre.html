@@ -1,0 +1,31 @@
+<!-- Modal -->
+<div class="modal-dialog" role="document">
+    <div class="modal-content ">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel2">Nueva membresia</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+
+            <form method="post" id="updateMem" action="{% url 'clientes:upgrate_mem' pk %}">
+                {% csrf_token %}
+                <div class="form-row">
+                        <label for="TipoMembresia"><b>Tipo Membresia:</b></label>
+                        <select name="tipo" required="" id="id_TipoM" class="form-control">
+                            <option value="" selected="">---------</option>
+                            {% for tipos in tipo %}
+                                <option value="{{ tipos.pk }}">{{ tipos.tipo }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="submit" form="updateMem" class="btn btn-primary active">Actualizar</button>
+        </div>
+    </div>
+</div>

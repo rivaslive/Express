@@ -1,0 +1,128 @@
+{% extends 'base/index.html' %}
+{% block title %}
+    Membresias
+{% endblock %}
+{% block activeClientes %}
+    active
+{% endblock %}
+{% block style %}
+    #dataTable_filter{
+    display:none;
+    }
+    .bg-gold{
+    color: yellow;
+    }
+    .bg-gradient-dark-red{
+    background:rgb(42,42,42);
+    }
+    .card h5{
+    color: white;
+    }
+    .card p{
+    color: rgb(180,180,180);
+    }
+    .card a{
+    color: white;
+    }
+    .card a:hover{
+    text-decoration:none;
+    color: white;
+    }
+    .card-title{
+    }
+    .card-subtitle{
+    font-size:.7rem;
+    }
+    .gold {
+    width: 0;
+    height: 0;
+    margin-top:-70px;
+    margin-left: calc(100% - 70px);
+    border-right: 35px solid #f0ad4e;
+    border-top: 35px solid transparent;
+    border-left: 35px solid transparent;
+    border-bottom: 35px solid #f0ad4e;
+    border-bottom-right-radius: 0.30rem;
+    }
+    .plata {
+    width: 0;
+    height: 0;
+    margin-top:-70px;
+    margin-left: calc(100% - 70px);
+    border-right: 35px solid #B96BBF;
+    border-top: 35px solid transparent;
+    border-left: 35px solid transparent;
+    border-bottom: 35px solid #B96BBF;
+    border-bottom-right-radius: 0.30rem;
+    }
+    .cobre{
+    width: 0;
+    height: 0;
+    margin-top:-70px;
+    margin-left: calc(100% - 70px);
+    border-right: 35px solid #86E54C;
+    border-top: 35px solid transparent;
+    border-left: 35px solid transparent;
+    border-bottom: 35px solid #86E54C;
+    border-bottom-right-radius: 0.30rem;
+    }
+    .card{
+    cursor:pointer;
+    }
+    .card:hover{
+    background:rgb(32,32,32);
+    color:black
+    }
+    .text-plata{
+    color:purple;
+    }
+    .ext{
+    margin: calc(100% - .5rem);
+    }
+
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1>Membrecias Actuales</h1>
+        </div>
+        {% for cliente in clientes %}
+
+            <div class="col-12 col-sm-6 col-xl-3" onclick="location.href='{% url 'clientes:detalle_membresia' cliente.pk %}'">
+
+                    <div class="card bg-gradient-dark-red">
+                        <div class="card-body text-center">
+                            {% if cliente.estado == 1 %}
+                                <a href="#" title="Deshabilitar membresia" class="ext"><i
+                                        class="fas fa-times-circle"></i></a>
+                            {% endif %}
+                            <h4 class="card-title text-white">{{ cliente.cliente.nombre }} {{ cliente.cliente.apellido }}</h4>
+                            <div class="d-flex justify-content-center">
+                                <a onclick="return abrir_modal('{% url 'clientes:upgrate_mem' cliente.pk %}')"
+                                   class="text-white" title="Actualizar membresia" style="margin-top: -.7rem;"><i
+                                        class="fas fa-arrow-alt-circle-up"></i></a>
+                                <h6 class="card-subtitle mb-2 mx-2 {% if cliente.tipoMembresia.pk == 1 %} bg-gold {% elif cliente.tipoMembresia.id == 2 %}text-plata{% endif %}">
+                                    {{ cliente.tipoMembresia }}
+                                </h6>
+                                {% if cliente.estado == 1 %}
+                                    <h6 class="card-subtitle mb-2 mx-2  text-info">ACTIVADA</h6>
+                                {% else %}
+                                    <h6 class="card-subtitle mb-2 mx-2  text-danger">DESACTIVADA</h6>
+                                {% endif %}
+                            </div>
+                            <p class="card-text mt-3">Contacto: {{ cliente.cliente.telefono }}</p>
+                            <p class="card-text">Marca: {{ cliente.cliente.marca }}</p>
+                            <p class="card-text">Modelo: {{ cliente.cliente.modelo }}</p>
+                            <p class="card-text">Color: {{ cliente.cliente.color }}</p>
+                            <p class="small">Fin Memb: {{ cliente.finalMembresia }}</p>
+
+                        </div>
+                        <div class="{% if cliente.tipoMembresia.pk == 1 %}gold {% elif cliente.tipoMembresia.id == 2 %}plata{% endif %}"></div>
+                    </div>
+
+            </div>
+
+
+        {% endfor %}
+    </div>
+{% endblock %}
