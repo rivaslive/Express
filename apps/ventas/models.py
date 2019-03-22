@@ -14,6 +14,13 @@ class Venta(models.Model):
     def __str__(self):
         return '{}'.format(self.fecha_venta)
 
+
+class VentaCategoria(models.Model):
+    nombreCategoria = models.CharField(max_length=60, blank=False, null=False)
+    estado = models.IntegerField(null=False, blank=False)
+    def __str__(self):
+        return '{}'.format(self.nombreCategoria)
+
 class detalle(models.Model):
     cantidad = models.IntegerField(null=False, blank=False)
     precio = models.DecimalField(max_digits=5, decimal_places=2, null=False, blank=False)
@@ -24,6 +31,7 @@ class detalle(models.Model):
         Articulo, on_delete=models.CASCADE, null=False, blank=False)
     id_venta = models.ForeignKey(
         Venta, on_delete=models.CASCADE, null=False, blank=False)
+    id_categoria = models.ForeignKey(VentaCategoria, on_delete=models.CASCADE, null=False, blank=False)
 
 class Factura(models.Model):
     venta = models.OneToOneField(Venta, null=False, blank=False, on_delete=models.CASCADE)

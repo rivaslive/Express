@@ -9,20 +9,6 @@ from django.dispatch import receiver
 from django.utils.timezone import now
 
 
-class Genero(models.Model):
-    genero = models.CharField(max_length=25, blank=False, null=False)
-    estado = models.BooleanField(default=True, blank=False, null=False)
-
-    def __str__(self):
-        return '{}'.format(self.genero)
-
-
-class Marca(models.Model):
-    nombre = models.CharField(max_length=80, blank=False, null=False)
-    estado = models.BooleanField(default=True, blank=False, null=False)
-    def __str__(self):
-        return '{}'.format(self.nombre)
-
 
 class TipoMembresia(models.Model):
     tipo = models.CharField(max_length=60, blank=False, null=False)
@@ -34,18 +20,19 @@ class TipoMembresia(models.Model):
 
 
 class Cliente(models.Model):
-    genero = models.ForeignKey(Genero, blank=False, null=False, on_delete=models.CASCADE)
+    genero = models.CharField(max_length=60, blank=False, null=False)
     nombre = models.CharField(max_length=60, blank=False, null=False)
-    apellido = models.CharField(max_length=60, blank=False, null=False)
+    correo = models.CharField(max_length=60, blank=False, null=False)
     telefono = models.IntegerField(blank=False, null=False)
     modelo = models.CharField(max_length=60, blank=False, null=False)
     color = models.CharField(max_length=60, blank=False, null=False)
     matricula = models.CharField(max_length=20, blank=False, null=False)
-    marca = models.ForeignKey(Marca, blank=False, null=False, on_delete=models.CASCADE)
+    marca = models.CharField(max_length=60, blank=False, null=False)
+    anio = models.IntegerField(blank=False, null=False)
     estado = models.BooleanField(default=True, blank=False, null=False)
 
     def __str__(self):
-        return '{}  {} AutoMovil: {} {}'.format(self.nombre, self.apellido, self.marca, self.modelo)
+        return '{} AutoMovil: {} {}'.format(self.nombre, self.marca, self.modelo)
 
 
 class TipoDeOperacion(models.Model):
@@ -56,6 +43,7 @@ class TipoDeOperacion(models.Model):
 
     def __str__(self):
         return '{} ${}'.format(self.tipo, self.precio)
+
 
 
 class Membresia(models.Model):
