@@ -28,7 +28,7 @@ class Articulo(models.Model):
 
 
 class Historial(models.Model):
-    id_articulo = models.ForeignKey()
+    id_articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE, null=False, blank=False)
     transaccion=models.CharField(max_length=60, null=False, blank=False) #Esto es por si es entrada o salida
     fecha_venta = models.DateField(null=False, blank=False)
     horaVenta = models.TimeField(auto_now_add=True, null=False, blank=False)

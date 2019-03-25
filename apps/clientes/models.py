@@ -9,7 +9,6 @@ from django.dispatch import receiver
 from django.utils.timezone import now
 
 
-
 class TipoMembresia(models.Model):
     tipo = models.CharField(max_length=60, blank=False, null=False)
     descripcion = models.CharField(max_length=200, blank=False, null=False)

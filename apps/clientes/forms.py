@@ -27,7 +27,6 @@ class ClienteForm(forms.ModelForm):
         model = Cliente
         fields = (
             'nombre',
-            'apellido',
             'telefono',
             'genero',
             'marca',
