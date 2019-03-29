@@ -2,48 +2,54 @@
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content ">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel2">Nueva membresia</h5>
+            {% if pk %}
+                 <h5 class="modal-title" id="exampleModalLabel2">Editar cliente</h5>
+                {% else %}
+                 <h5 class="modal-title" id="exampleModalLabel2">Registrar nuevo cliente</h5>
+            {% endif %}
+
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <div class="modal-body">
+            <a>Datos del cliente</a>
+            {% if pk %}
+             <form method="post" id="cliente" action="{% url 'clientes:editar_cliente' pk%}">
+            {% else %}
+                <form method="post" id="cliente" action="{% url 'clientes:reg_membrecia' %}">
+            {% endif %}
 
-            <form method="post" id="cliente" action="{% url 'clientes:reg_membrecia' %}">
                 {% csrf_token %}
                 <div class="form-row">
 
                     <div class="form-group col-md-4">
-                        <label for="Name"><b>Nombres:</b></label>
+                        <label for="Name"><b>Nombre completo:</b></label>
                         {{ form.nombre }}
                     </div>
+
                     <div class="form-group col-md-4">
-                        <label for="Apellido"><b>Apellidos:</b></label>
-                        {{ form.apellido }}
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="Genero"><b>Genero:</b></label>
+                        <label for="Genero"><b>Género:</b></label>
                         {{ form.genero }}
                     </div>
 
                     <div class="form-group col-md-4">
 
-                        <label for="Telefono"><b>Telefono:</b></label>
+                        <label for="Telefono"><b>Teléfono:</b></label>
                         {{ form.telefono }}
                     </div>
-
                     <div class="form-group col-md-4">
 
-                        <label for="TipoMembresia"><b>Tipo Membresia:</b></label>
-                        <select name="tipoM" required="" id="id_TipoM" class="form-control">
-                            <option value="" selected="">---------</option>
-                            {% for tipo in tipoMembrecia %}
-                                <option value="{{ tipo.pk }}">{{ tipo.tipo }}</option>
-                            {% endfor %}
-
-                        </select>
+                        <label for="Telefono"><b>Correo Electrónico(Opcional):</b></label>
+                        {{ form.correo }}
                     </div>
+
+
+
                     <hr class="sidebar-divider">
+                    <div class="form-group col-md-12">
+                          <a>Datos del vehículo</a>
+                    </div>
                     <div class="form-group col-md-4">
                         <label for="TipoMembrecia"><b>Marca:</b></label>
                         {{ form.marca }}
@@ -60,13 +66,24 @@
                         <label for="TipoMembrecia"><b>Matricula:</b></label>
                         {{ form.matricula }}
                     </div>
+                    <div class="form-group col-md-4">
+                        <label for="TipoMembrecia"><b>Año:</b></label>
+                        {{ form.anio }}
+                    </div>
                 </div>
 
             </form>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <button type="submit" form="cliente" class="btn btn-primary active">Crear</button>
+            {% if pk %}
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="submit" form="cliente" class="btn btn-primary active">Confirmar Modificación</button>
+            {% else %}
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="submit" form="cliente" class="btn btn-primary active">Crear</button>
+            {% endif %}
+
+
         </div>
     </div>
 </div>

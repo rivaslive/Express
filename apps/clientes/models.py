@@ -21,7 +21,7 @@ class TipoMembresia(models.Model):
 class Cliente(models.Model):
     genero = models.CharField(max_length=60, blank=False, null=False)
     nombre = models.CharField(max_length=60, blank=False, null=False)
-    correo = models.CharField(max_length=60, blank=False, null=False)
+    correo = models.CharField(max_length=60, blank=True, null=True)
     telefono = models.IntegerField(blank=False, null=False)
     modelo = models.CharField(max_length=60, blank=False, null=False)
     color = models.CharField(max_length=60, blank=False, null=False)

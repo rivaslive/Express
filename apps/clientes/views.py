@@ -1,15 +1,13 @@
 import json
 
+from django.contrib import messages
+from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import CreateView, TemplateView
-from django.contrib.auth import login, authenticate
-from apps.clientes.forms import ClienteForm, SignUpForm, MembresiaForm
-from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.models import User
-from django.contrib import messages
+from django.db.models import Sum, Q
+
+from apps.clientes.forms import ClienteForm, MembresiaForm
 # Create your views here.
 from apps.clientes.models import Cliente, Membresia, TipoMembresia, Operacion
 
@@ -43,10 +41,10 @@ def completarPerfil(request):
             if form2.is_valid():
                 form2.save()
                 messages.success(request, 'Membresia Exitosa')
-                return redirect('clientes:membresias')
+                return redirect('clientes:mostrar_clientes')
             else:
-                messages.warning(request, 'se creo el cliente pero no la membresia')
-            return redirect('clientes:membresias')
+                messages.success(request, 'Se creó el cliente')
+            return redirect('clientes:mostrar_clientes')
 
         else:
             messages.warning(request, "Informacion Incorrecta 1")
@@ -88,6 +86,7 @@ def upgradeMem(request, pk):
         tipo = TipoMembresia.objects.all().exclude(estado=0)
         return render(request, 'clientes/upgradeMembre.html', {'tipo': tipo, 'pk':pk})
 
+
 @csrf_exempt
 def buscarClientJSON(request):
     buscar = request.POST.get('valor', '')
@@ -104,6 +103,57 @@ def buscarClientJSON(request):
 
     #print(str(data))
     return JsonResponse(data, safe=False)
+
+def mostrarClientes(request):
+    clientes = Cliente.objects.all().exclude(estado=0)
+    return render(request, 'clientes/clientes_dashboard.html',{'clientes': clientes})
+
+def mostrarClientesDes(request):
+    clientes = Cliente.objects.all().exclude(estado=1)
+    return render(request, 'clientes/clientesDeshabilitados.html',{'clientes': clientes})
+
+
+
+def editarCliente(request, pk):
+    clientes = Cliente.objects.get(pk=pk)
+    if request.method == 'GET':
+        form = ClienteForm(instance=clientes)
+    else:
+        form = ClienteForm(request.POST, instance=clientes)
+        if  form.is_valid():
+            form.save()
+            messages.success(request,'Cliente editado correctamente')
+            return redirect('clientes:mostrar_clientes')
+        messages.warning(request,'Error al editar el cliente')
+        return redirect('clientes:mostrar_clientes')
+    return render(request,'clientes/crearMembresias.html',{'form':form, 'pk':pk,'clientes':clientes})
+
+def deshabilitarCliente(request,pk):
+    clientes = Cliente.objects.get(pk=pk)
+    if request.method == "POST":
+        respuesta = get_object_or_404(Cliente,pk=clientes.pk)
+        respuesta.estado = 0
+        respuesta.save()
+        messages.success(request, 'Cliente deshabilitado')
+        return  redirect('clientes:mostrar_clientes')
+    return render(request,'clientes/cambiarEstadoCliente.html',{'clientes':clientes,'pk':pk})
+
+def habilitarCliente(request,pk):
+    clientes = Cliente.objects.get(pk=pk)
+    if request.method == "POST":
+        respuesta = get_object_or_404(Cliente, pk=clientes.pk)
+        respuesta.estado = 1
+        respuesta.save()
+        messages.success(request, 'Cliente habilitado')
+        return redirect('clientes:mostrar_clientes')
+    return render(request, 'clientes/cambiarEstadoCliente.html', {'clientes': clientes, 'pka': pk})
+
+def buscarClienteActivo(request):
+    busqueda = request.GET.get('search','')
+    query = Cliente.objects.filter(Q(nombre__contains=busqueda ) | Q(marca__contains=busqueda)).exclude(estado=0).order_by('nombre')
+    print(query)
+    return render(request, 'clientes/clientes_dashboard.html',{'clientes':busqueda, 'query':query})
+
 
 
 

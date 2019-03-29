@@ -1,0 +1,42 @@
+<div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    {% if clientes.estado == 1 %}
+                         <h5 class="modal-title" id="exampleModalLabel1">Deshabilitar Cliente</h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                      <form id="darBaja" action="{%  url 'clientes:deshabilitarCliente' pk %}" method="post" >
+                          <h6>¿En verdad quieres deshabilitar el cliente <b>{{ clientes.nombre}} </b> ?</h6>
+                          {% csrf_token %}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button form="darBaja" type="submit" class="btn btn-outline-danger active mx-4">Deshabilitar</button>
+                </div>
+                       {% else %}
+                         <h5 class="modal-title" id="exampleModalLabel1">Habilitar Cliente</h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                      <form id="darAlta" action="{%  url 'clientes:habilitarCliente' pka %}" method="post" >
+                          <h6>¿En verdad quieres habilitar el cliente <b>{{ clientes.nombre }} </b> ?</h6>
+                          {% csrf_token %}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button form="darAlta" type="submit" class="btn btn-outline-success active mx-4">Habilitar</button>
+                </div>
+                    {% endif %}
+
+
+
+
+            </div>
+        </div>

@@ -154,6 +154,7 @@
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Operaciones:</h6>
+                        <a class="collapse-item" href="{% url 'clientes:mostrar_clientes' %}">Clientes Registrados</a>
                         <a class="collapse-item" onclick="return abrir_modal('{% url 'clientes:reg_membrecia' %}')">Nuevo
                             cliente</a>
                         <a class="collapse-item" href="{% url 'clientes:membresias' %}">Membrecias</a>

@@ -103,8 +103,7 @@ def buscar(request):
         request.session['codigo'] = ''
         print ("CODIGO ADMIN RESETEADO")
     buscar = request.GET.get('search', '')
-    queryset = Articulo.objects.filter(
-        Q(nombre_articulo__icontains=buscar) | Q(codigo_articulo__contains=buscar) | Q(id_categoria__nombre_Categoria__contains=buscar)).exclude(is_activate=0).order_by(
+    queryset = Articulo.objects.filter(Q(nombre_articulo__icontains=buscar) | Q(codigo_articulo__contains=buscar) | Q(id_categoria__nombre_Categoria__contains=buscar)).exclude(is_activate=0).order_by(
         'nombre_articulo')
 
     return render(request, 'articulos/articulo.html', {'articulo': queryset, 'busqueda': buscar})
@@ -224,7 +223,6 @@ def generador(request):
 def articulo_edi(request, pk):
     articulo = Articulo.objects.get(id=pk)
     cat = Categoria.objects.all()
-
     if request.method == 'GET':
         form = ArticuloForm(instance=articulo)
     else:
@@ -235,8 +233,7 @@ def articulo_edi(request, pk):
             return redirect('articulo:articulo')
         messages.warning(request, 'error al editar articulo')
         return redirect('articulo:articulo')
-    return render(request, 'articulos/productoModal.html',
-                  {'form': form, 'pk': pk, 'articulo': articulo, 'categorias': cat})
+    return render(request, 'articulos/productoModal.html',{'form': form, 'pk': pk, 'articulo': articulo, 'categorias': cat})
 
 
 def actualizarEstado(request, pk):

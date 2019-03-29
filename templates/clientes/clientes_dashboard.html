@@ -1,0 +1,145 @@
+{% extends 'base/index.html' %}
+{% block title %}
+    Clientes
+{% endblock %}
+{% block search %}
+    <!-- Topbar Search -->
+    <form action="{% url  'clientes:buscarClienteActivo' %}" method="get" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+        <div class="input-group">
+            <input type="text" class="form-control bg-light border-0 small"
+                   placeholder="Buscar Cliente..."
+                   name="search"
+                   aria-label="Search" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-dark" type="button">
+                    <i class="fas fa-search fa-sm"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+{% block searchMobile %}
+    <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+    <li class="nav-item dropdown no-arrow d-sm-none">
+        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-search fa-fw"></i>
+        </a>
+        <!-- Dropdown - Messages -->
+        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+             aria-labelledby="searchDropdown">
+            <form class="form-inline mr-auto w-100 navbar-search">
+                <div class="input-group">
+                    <input type="text" class="form-control bg-light border-0 small"
+                           placeholder="Buscar clientes..." aria-label="Search"
+                           aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-dark" type="button">
+                            <i class="fas fa-search fa-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </li>
+{% endblock %}
+{% block content %}
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+        <div class="d-flex col-12 col-md-3">
+            <div class="col-8 col-md-9">
+                <h5 class="border-bottom border-gray text-black pb-2 mb-0">Clientes Registrados</h5>
+            </div>
+            <div class="col-4 col-md-3">
+                <a title="Registra nuevo cliente" onclick="return abrir_modal('{% url 'clientes:reg_membrecia' %}')"
+                   class="btn-circle bg-info">
+                    <i class="fas fa-plus text-white text-sm"></i>
+                </a>
+            </div>
+
+            <div class="col-4 col-md-3">
+                <a title="Clientes deshabilitados" href="{% url 'clientes:mostrar_clientes_des' %}"
+                   class="btn-circle bg-danger">
+                    <i class="fas fa-receipt text-white"></i>
+                </a>
+
+            </div>
+
+
+
+        </div>
+
+        {% if clientes %}
+            {% for foo in clientes %}
+
+                <div class="text-muted pt-3 ">
+                    <div class="pt-2  small  border-bottom ">
+                        <div class="row justify-content-between text-center w-100" id="contenedor">
+
+                            <div class="1h-100 col-12 col-sm-12 col-md-3">
+                                <h6 class="larger">{{ foo.nombre }}</h6>
+                                <h6 class="smaller">
+                                    <small>Código:</small>
+                                    {{ foo.id }}
+                                </h6>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-3">
+                                {% if foo.correo %}
+                                    <p>Correo Electrónico: <strong>{{ foo.correo }}</strong></p>
+                                {% else %}
+                                    <p>Correo Electrónico: <strong>No especificado</strong></p>
+                                {% endif %}
+
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-3">
+                                <p>Teléfono: <strong>{{ foo.telefono }}</strong></p>
+
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-3">
+                                <p>Marca: <strong>{{ foo.marca }}</strong></p>
+
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-3">
+                                <p>Modelo: <strong>{{ foo.modelo }}</strong></p>
+
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-3">
+                                <p>Color: <strong>{{ foo.color }}</strong></p>
+
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-3">
+                                <p>Matrícula: <strong>{{ foo.matricula }}</strong></p>
+
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-3">
+                                <p>Año: <strong>{{ foo.anio }}</strong></p>
+
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-3 text-center">
+                                <a>Acciones</a>
+                                <a title="Editar Cliente"
+                                   onclick="return abrir_modal('{% url 'clientes:editar_cliente' foo.pk %}')">
+                                    <i class="fas fa-pencil-alt fa-md fa-fw icono bg-success">
+                                        <span style="font-size: 20px"></span>
+                                    </i>
+                                </a>
+                                <a title="Deshabilitar Cliente"
+                                   onclick="return abrir_modal('{% url 'clientes:deshabilitarCliente' foo.pk %}')">
+                                    <i class="fas fa-minus-circle fa-md fa-fw icono bg-danger">
+                                        <span style="font-size: 20px"></span>
+                                    </i>
+                                </a>
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+        {% else %}
+            <h6>No hay clientes registrados</h6>
+        {% endif %}
+
+    </div>
+
+{% endblock %}
+
